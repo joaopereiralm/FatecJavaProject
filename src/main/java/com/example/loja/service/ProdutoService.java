@@ -42,4 +42,16 @@ public class ProdutoService {
 
     }
 
+    //atualiza produto no vetor
+    public Produto atualiza(Long id, Produto novo){
+        //procura produto procurando
+        for (int i = 0; i < produtos.size(); i++){
+            if (produtos.get(i).getId().equals(id)){ //verifica se achou
+                novo.setId(id); //atualiza id
+                produtos.set(i, novo); //atualiza produto no vetor
+                return novo; //retorna produto atualizado
+            }
+        }
+        return null; //n encontrou
+    }
 }

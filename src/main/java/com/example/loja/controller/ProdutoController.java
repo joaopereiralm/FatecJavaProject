@@ -13,9 +13,7 @@ import java.util.List;
 public class ProdutoController {
     ProdutoService produtoService;
 
-    public ProdutoController() {
-        this.produtoService = produtoService;
-    }
+    public ProdutoController() {this.produtoService = produtoService;}
 
     @GetMapping
     public ResponseEntity<List<Produto>> consulta() {
@@ -38,6 +36,17 @@ public class ProdutoController {
         return ResponseEntity.created(uri).body(novo);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody Produto produto){
+        Produto atualizado = produtoService.atualiza(id, produto);
+        if (atualizado != null){
+            return ResponseEntity.ok(atualizado);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+
+    //função para deletar
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         boolean resp = produtoService.delete(id);
