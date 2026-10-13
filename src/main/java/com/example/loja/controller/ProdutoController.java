@@ -3,18 +3,17 @@ package com.example.loja.controller;
 import com.example.loja.model.Produto;
 import com.example.loja.service.ProdutoService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoController {
     ProdutoService produtoService;
-    public ProdutoController(){
+
+    public ProdutoController() {
         this.produtoService = produtoService;
     }
 
@@ -26,9 +25,25 @@ public class ProdutoController {
     @GetMapping("/{id}")
     public ResponseEntity<Produto> consultaPorId(@PathVariable Long id) {
         Produto prod = produtoService.consultaPorId(id);
-        if (prod != null){
+        if (prod != null) {
             return ResponseEntity.ok(prod);
+        } else return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<Produto> insere(@RequestBody Produto produto) {
+        Produto novo = produtoService.insere(produto);
+        // URI - Uniform Resource Identifier
+        URI uri = URI.create("/produtos" + novo.getId());
+        return ResponseEntity.created(uri).body(novo);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        boolean resp = produtoService.delete(id);
+        if (resp) {
+            return ResponseEntity.noContent().build(); // removeu - statusCode 204
         }
-        else return ResponseEntity.notFound().build();
+        return ResponseEntity.notFound().build(); // não removeu - statusCode 404
     }
 }
