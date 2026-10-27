@@ -1,3 +1,5 @@
+package com.example.loja.model;
+
 public class Cliente {
 
     private Long id;
